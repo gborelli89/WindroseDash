@@ -185,13 +185,13 @@ app.layout = html.Div([
                 style={'width':'70%'}
             )], style={'width': '50%', 'display': 'inline-block'}
         ),
-        html.H4("Heading labels"),
+        html.H4("Total number of wind headings"),
         dcc.Dropdown(
             id='headinglabel',
             options=[
-                {'label':'4 directions', 'value':0},
-                {'label':'8 directions', 'value':1},
-                {'label':'16 directions', 'value':2}
+                {'label':'4 headings', 'value':0},
+                {'label':'8 headings', 'value':1},
+                {'label':'16 headings', 'value':2}
             ],
             value= 1,
             clearable=False,
