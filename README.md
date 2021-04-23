@@ -28,7 +28,12 @@ The wind heading must be a value between 0º and 360º. The convention adopted i
 * South: 180º
 * West: 270º
 
-The *velocity breaks* entry refers to the velocity interval, must be started with a value grater than zero and must be semicolon separated. For example, if the string 1;3;5 is given than the intervals computed are 0 <= V < 1.0, 1.0 <= V < 3.0, 3.0 <= V < 5.0 and V >= 5.0. 
+The *velocity breaks* entry refers to the velocity interval, must be started with a value grater than zero and must be semicolon separated. For example, if the string 1;3;5 is given than the intervals computed are 
+
+* 0 <= V < 1.0 
+* 1.0 <= V < 3.0 
+* 3.0 <= V < 5.0 
+* V >= 5.0 
 
 The wind velocity module can be given in four distinct units: m/s, km/h, mph and knots. Conversion between than is provided in the *From*, *To* entries.
 
