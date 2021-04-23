@@ -52,9 +52,11 @@ def parse_contents(contents, filename, delim, dec, velcol,dircol, dirlabels,
 # Processing function
 def processcsv(df, vcol, dcol, dlabel, vlim, unit_from, unit_to, onlyvalid):
     # Spliting data
+    vcol = vcol - 1
     v = df.iloc[:,vcol]
     fac = convel.loc[unit_from, unit_to]
     v = v*fac
+    dcol= dcol - 1
     d = df.iloc[:,dcol]
     df_new = pd.DataFrame(data={'V':v, 'Vrange':'X', 'Dir':d, 'Dirlabel':'X'})
      
