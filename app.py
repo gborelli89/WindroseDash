@@ -148,7 +148,9 @@ app.layout = html.Div([
                     {'label':'tab', 'value':'\t'}
                 ],
                 style={'width':'90%'},
-                placeholder='Delimiter'
+                placeholder='Delimiter',
+                clearable=False,
+                searchable=False
             ), style={'width': '48%', 'display': 'inline-block'}
         ),
         html.Div(
@@ -159,7 +161,9 @@ app.layout = html.Div([
                     {'label':',', 'value':','}
                 ],
                 style={'width':'90%'},
-                placeholder='Decimal'
+                placeholder='Decimal',
+                clearable=False,
+                searchable=False
             ),style={'width': '48%', 'display': 'inline-block'}
         ),
 
@@ -189,7 +193,9 @@ app.layout = html.Div([
                 {'label':'8 directions', 'value':1},
                 {'label':'16 directions', 'value':2}
             ],
-            value= 1
+            value= 1,
+            clearable=False,
+            searchable=False
         ),
         html.H4("Velocity breaks delimited by semicolon"),
         dcc.Input(
@@ -211,7 +217,9 @@ app.layout = html.Div([
                     {'label':'knots', 'value':'knots'}
                 ],
                 style={'width':'90%'},
-                value='m/s'
+                value='m/s',
+                clearable=False,
+                searchable=False
             )], style={'width': '48%', 'display': 'inline-block'}
         ),
         html.Div([
@@ -225,7 +233,9 @@ app.layout = html.Div([
                     {'label':'knots', 'value':'knots'}
                 ],
                 style={'width':'90%'},
-                value='m/s'
+                value='m/s',
+                clearable=False,
+                searchable=False
             )], style={'width': '48%', 'display': 'inline-block'}
         ),
 
@@ -236,7 +246,9 @@ app.layout = html.Div([
                 {'label': 'Yes', 'value': 1},
                 {'label': 'No, consider everything', 'value': 0}
             ],
-            value='No, consider everything'
+            value='No, consider everything',
+            clearable=False,
+            searchable=False
         ),
 
         html.Hr(),
