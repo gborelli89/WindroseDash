@@ -25,9 +25,9 @@ def parse_contents(contents, filename, delim, dec, velcol,dircol, dirlabels,
             # Assume that the user uploaded a CSV file
             df = pd.read_csv(
                 io.StringIO(decoded.decode('utf-8')), delimiter=delim, decimal=dec)
-            wr, dfcomp, N, n = processcsv(df,velcol,dircol,dirlabels,vlim,unit_from, unit_to,bool(valid_data))
-            msg = infomsg(N,n)
-            fig = px.bar_polar(wr, r='Freq', theta='Dir', color='V', width=1200, height=900,
+            wr, dfcomp, Ncalm, N, n = processcsv(df,velcol,dircol,dirlabels,vlim,unit_from, unit_to,bool(valid_data))
+            msg = infomsg(N,n, Ncalm)
+            fig = px.bar_polar(wr, r='Freq', theta='Dir', color='V', width=900, height=700,
                     color_discrete_sequence=px.colors.sequential.Viridis)
             fig.update_layout(font_size=22, font_color="black", legend_title='V(' + unit_to + ')')
         #elif 'xls' in filename:
@@ -95,12 +95,17 @@ def processcsv(df, vcol, dcol, dlabel, vlim, unit_from, unit_to, onlyvalid):
     df_new.loc[df_new['V'] >= 0, 'Vrange'] = vlim2[0]
     for i in range(0,len(vlim_float)):
         k = i+1
-        df_new.loc[df_new['V'] >= vlim_float[i], 'Vrange'] = vlim2[k]
+        df_new.loc[df_new['V'] > vlim_float[i], 'Vrange'] = vlim2[k]
 
     # Valid measurements
     df_complete = df_new.copy()
     df_complete.dropna(axis=0, how='any', inplace=True)
     n = df_complete.shape[0]
+
+    # Calm situation: V=0
+    df_complete.loc[df_complete['V'] == 0, 'Dirlabel'] = 'CALM'
+    df_complete.loc[df_complete['V'] == 0, 'Vrange'] = 'CALM'
+    Ncalm = df_complete.loc[df_complete['Dirlabel'] == 'CALM', 'Dirlabel'].count()
 
     # Grouping data
     countevents = df_complete.groupby(['Dirlabel','Vrange'])['V'].count()
@@ -116,17 +121,25 @@ def processcsv(df, vcol, dcol, dlabel, vlim, unit_from, unit_to, onlyvalid):
         df_temp = pd.DataFrame(data={'Dir':list(np.repeat(i,len(freq[i]))),'V':list(freq[i].index), 'Freq':list(freq[i])})
         wr = pd.concat([wr,df_temp])
     
-    return wr, df_complete, N, n
+    return wr, df_complete, Ncalm, N, n
 
-def infomsg(N,n):
+def infomsg(N,n,Ncalm):
     info_total = 'Total number of measurements: ' + str(N)
     info_valid = 'Number of valid measurements: ' + str(n)
+    info_calm = 'Calm wind: ' + str(Ncalm)
     p_na = 100*(1-(n/N))
     info_na = 'NA percentual: ' + str(np.round(p_na,2)) + '%'
+    p_calm_all = 100*(Ncalm/N)
+    info_pcalm_all = 'Calm percentual respect to ALL data: ' + str(np.round(p_calm_all,2)) + '%'
+    p_calm_valid = 100*(Ncalm/n)
+    info_pcalm_valid = 'Calm percentual respect to VALID data: ' + str(np.round(p_calm_valid,2)) + '%'
     return html.Div([
         html.H5(info_total),
         html.H5(info_valid),
-        html.H5(info_na)
+        html.H5(info_na),
+        html.H5(info_calm),
+        html.H5(info_pcalm_all),
+        html.H5(info_pcalm_valid)
     ])
 
 
@@ -201,10 +214,11 @@ app.layout = html.Div([
         dcc.Input(
             id='velbreak',
             type='text',
-            placeholder='Eg. 1;2;3;4;5;6'
+            placeholder='Eg. 0;1;3;5;7;9'
         ),
 
         #html.H4("Conversion"),
+        html.Br(),
 
         html.Div([
             html.H4("From"),
@@ -220,7 +234,7 @@ app.layout = html.Div([
                 value='m/s',
                 clearable=False,
                 searchable=False
-            )], style={'width': '48%', 'display': 'inline-block'}
+            )], style={'width': '45%', 'display': 'inline-block'}
         ),
         html.Div([
             html.H4("To"),
@@ -236,7 +250,7 @@ app.layout = html.Div([
                 value='m/s',
                 clearable=False,
                 searchable=False
-            )], style={'width': '48%', 'display': 'inline-block'}
+            )], style={'width': '45%', 'display': 'inline-block'}
         ),
 
         html.H4("Frequency considering only valid measurements?"),
@@ -251,7 +265,7 @@ app.layout = html.Div([
             searchable=False
         ),
 
-        html.Hr(),
+        html.Br(),
 
         dcc.Upload(
             id='upload-data',
@@ -276,10 +290,10 @@ app.layout = html.Div([
         html.Div(id='output-filename')
 
 
-    ], style={'width':'25%','display':'inline-block'} 
+    ], style={'width':'30%','display':'inline-block'} 
     ),
 
-    html.Div(id='output-data-upload', style={'width':'75%', 'float':'right'})
+    html.Div(id='output-data-upload', style={'width':'70%', 'float':'right'})
     
 ])
 
