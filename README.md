@@ -30,14 +30,17 @@ The wind heading must be a value between 0º and 360º. The convention adopted i
 
 The *velocity breaks* entry refers to the velocity interval, must be started with a value grater than zero and must be semicolon separated. For example, if the string 1;3;5 is given than the intervals computed are 
 
-* 0 <= V < 1.0 
-* 1.0 <= V < 3.0 
-* 3.0 <= V < 5.0 
-* V >= 5.0 
+* 0 < V <= 1.0 
+* 1.0 < V <= 3.0 
+* 3.0 < V <= 5.0 
+* V > 5.0 
+
+
+The CALM situation is considered for zero velocity in the meteorological station. 
 
 The wind velocity module can be given in four distinct units: m/s, km/h, mph and knots. Conversion between than is provided in the *From*, *To* entries.
 
-Finally, the *Frequency considering only valid measurements* entry indicates if one should use all data for frequency calculations or if only the non NA data should be applied. Nevertheless the NA percentual is shown.
+Finally, the *Frequency considering only valid measurements* entry indicates if one should use all data for frequency calculations or if only the non NA data should be applied. The percentual of valid data as well as the calm data is presented below the wind rose plot.
 
 ## Considerations
 
