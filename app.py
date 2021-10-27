@@ -80,6 +80,7 @@ def processcsv(df, vcol, dcol, dlabel, vlim, unit_from, unit_to, onlyvalid):
     for k in range(1,len(dlabel)):
         i = k - 1
         df_new.loc[df_new['Dir'] >= 0.5*deltad + i*deltad, 'Dirlabel'] = dlabel[k]
+    df_new.loc[df_new['Dir'] >= len(dlabel)*deltad - 0.5*deltad, 'Dirlabel'] = dlabel[0]
     
     # Working with the velocity ranges
     vlim1 = vlim.split(';')
